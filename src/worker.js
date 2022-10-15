@@ -1,4 +1,4 @@
-const { workerData, threadId } = require("node:worker_threads");
+const { workerData, threadId, parentPort } = require("node:worker_threads");
 
 class AccountProcessor {
     constructor(data, passedThreadId) {
@@ -12,13 +12,15 @@ class AccountProcessor {
         for (let i = this.startIdx; i <= this.endIdx; i++) {
             this.calculateAvgBalance(this.accounts[i]);
             this.updateBenefit(this.accounts[i]);
-        }
+            this.accounts[i].averageBalanceThreadId = threadId;
+            this.accounts[i].freeTransferThreadId = threadId;
+            this.accounts[i].bonusBalanceThreadId = threadId;
 
-        // console.log(`From thread ${this.threadId}: ${this.startIdx} - ${this.endIdx}`);
-        // const account = this.accounts[this.startIdx];
-        // console.log(
-        //     `Account id ${this.startIdx}: ${account.balance} ${account.previousBalance} ${account.averageBalance} ${account.freeTransfer}`
-        // );
+            parentPort.postMessage({
+                index: i,
+                account: this.accounts[i],
+            });
+        }
     }
 
     calculateAvgBalance(account) {
