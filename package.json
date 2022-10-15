@@ -1,0 +1,22 @@
+{
+  "name": "eod",
+  "version": "1.0.0",
+  "description": "Participant: Henry Kurniawan Wibowo\r Email: henry.k.wibowo@gmail.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/segogoreng/eod.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/segogoreng/eod/issues"
+  },
+  "homepage": "https://github.com/segogoreng/eod#readme",
+  "dependencies": {
+    "csv": "^6.2.1"
+  }
+}
