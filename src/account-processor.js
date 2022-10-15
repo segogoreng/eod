@@ -12,9 +12,9 @@ class AccountProcessor {
         for (let i = this.startIdx; i <= this.endIdx; i++) {
             this.calculateAvgBalance(this.accounts[i]);
             this.updateBenefit(this.accounts[i]);
-            this.accounts[i].averageBalanceThreadId = threadId;
-            this.accounts[i].freeTransferThreadId = threadId;
-            this.accounts[i].bonusBalanceThreadId = threadId;
+            this.accounts[i].averageBalanceThreadId = this.threadId;
+            this.accounts[i].freeTransferThreadId = this.threadId;
+            this.accounts[i].balanceBonusThreadId = this.threadId;
 
             parentPort.postMessage({
                 index: i,

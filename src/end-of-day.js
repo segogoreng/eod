@@ -21,7 +21,37 @@ class EndOfDay {
             const startIdx = i * 25;
             const endIdx = startIdx + 24;
 
-            const worker = new Worker("./src/worker.js", {
+            const worker = new Worker("./src/account-processor.js", {
+                workerData: {
+                    accounts: this.data,
+                    startIdx,
+                    endIdx,
+                },
+            });
+
+            const self = this;
+
+            worker.on("message", function (message) {
+                self.data[message.index] = message.account;
+            });
+
+            worker.on("exit", function () {
+                exitCounter++;
+                if (exitCounter >= NUM_OF_THREADS) {
+                    self.addBonusBalanceToFirstHundred();
+                }
+            });
+        }
+    }
+
+    addBonusBalanceToFirstHundred() {
+        let exitCounter = 0;
+
+        for (let i = 0; i < NUM_OF_THREADS; i++) {
+            const startIdx = i * 12;
+            const endIdx = i === NUM_OF_THREADS - 1 ? 99 : startIdx + 11;
+
+            const worker = new Worker("./src/bonus-processor.js", {
                 workerData: {
                     accounts: this.data,
                     startIdx,
@@ -67,8 +97,8 @@ class EndOfDay {
                 this.data[i].name,
                 this.data[i].age,
                 this.data[i].balance,
-                this.data[i].bonusBalanceThreadId,
-                "first100BonusThreadId",
+                this.data[i].balanceBonusThreadId,
+                this.data[i].firstHundredBalanceBonusThreadId ?? "NOT PROCESSED",
                 this.data[i].previousBalance,
                 this.data[i].averageBalance,
                 this.data[i].averageBalanceThreadId,
