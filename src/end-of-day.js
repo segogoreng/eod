@@ -1,4 +1,7 @@
 const { Account } = require("./account");
+const { Worker } = require("node:worker_threads");
+
+const NUM_OF_THREADS = 8;
 
 class EndOfDay {
     constructor() {
@@ -10,7 +13,18 @@ class EndOfDay {
     }
 
     process() {
-        console.log(this.data);
+        for (let i = 0; i < NUM_OF_THREADS; i++) {
+            const startIdx = i * 25;
+            const endIdx = startIdx + 24;
+
+            new Worker("./src/worker.js", {
+                workerData: {
+                    accounts: this.data,
+                    startIdx,
+                    endIdx,
+                },
+            });
+        }
     }
 }
 
