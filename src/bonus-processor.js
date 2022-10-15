@@ -22,5 +22,5 @@ class BonusProcessor {
     }
 }
 
-const accountProcessor = new BonusProcessor(workerData, threadId);
-accountProcessor.process();
+const bonusProcessor = new BonusProcessor(workerData, threadId);
+bonusProcessor.process();
